@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+
+if [ -s "$HOME/.nvm/nvm.sh" ]; then
+  # Load nvm and use the correct Node version
+  export NVM_DIR="$HOME/.nvm"
+  # This loads nvm
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+  # This loads nvm bash_completion (optional)
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+fi
+
+npm run lint && npm run lint-staged
