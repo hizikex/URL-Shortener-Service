@@ -1,16 +1,31 @@
-import { Column, Model, Table } from 'sequelize-typescript';
+import {
+  Table,
+  Column,
+  Model,
+  DataType,
+} from 'sequelize-typescript';
 
-@Table
-export class Url extends Model {
-  @Column
+@Table({
+  tableName: 'urls',
+})
+export class Url extends Model<Url> {
+  @Column({
+    allowNull: false,
+  })
   originalUrl: string;
 
-  @Column({ unique: true })
+  @Column({
+    unique: true,
+  })
   shortCode: string;
 
-  @Column({ defaultValue: () => new Date(Date.now() + 24 * 60 * 60 * 1000) })
+  @Column({
+    allowNull: true,
+  })
   expiresAt: Date;
 
-  @Column({ defaultValue: 0 })
+  @Column({
+    defaultValue: 0,
+  })
   clickCount: number;
 }

@@ -19,22 +19,32 @@ let Url = class Url extends sequelize_typescript_1.Model {
 };
 exports.Url = Url;
 __decorate([
-    sequelize_typescript_1.Column,
+    (0, sequelize_typescript_1.Column)({
+        allowNull: false,
+    }),
     __metadata("design:type", String)
 ], Url.prototype, "originalUrl", void 0);
 __decorate([
-    (0, sequelize_typescript_1.Column)({ unique: true }),
+    (0, sequelize_typescript_1.Column)({
+        unique: true,
+    }),
     __metadata("design:type", String)
 ], Url.prototype, "shortCode", void 0);
 __decorate([
-    (0, sequelize_typescript_1.Column)({ defaultValue: () => new Date(Date.now() + 24 * 60 * 60 * 1000) }),
+    (0, sequelize_typescript_1.Column)({
+        allowNull: true,
+    }),
     __metadata("design:type", Date)
 ], Url.prototype, "expiresAt", void 0);
 __decorate([
-    (0, sequelize_typescript_1.Column)({ defaultValue: 0 }),
+    (0, sequelize_typescript_1.Column)({
+        defaultValue: 0,
+    }),
     __metadata("design:type", Number)
 ], Url.prototype, "clickCount", void 0);
 exports.Url = Url = __decorate([
-    sequelize_typescript_1.Table
+    (0, sequelize_typescript_1.Table)({
+        tableName: 'urls',
+    })
 ], Url);
 //# sourceMappingURL=url.model.js.map

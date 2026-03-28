@@ -22,19 +22,18 @@ exports.AppModule = AppModule = __decorate([
         imports: [
             sequelize_1.SequelizeModule.forRoot({
                 dialect: 'mysql',
-                host: 'localhost',
+                host: '127.0.0.1',
                 port: 3306,
                 username: 'root',
                 password: 'root',
-                database: 'url_shortner_service',
+                database: 'url_shortener_service',
                 models: [url_model_1.Url],
                 autoLoadModels: true,
                 synchronize: true,
             }),
+            auth_module_1.AuthModule,
+            url_module_1.UrlModule,
         ],
-    }),
-    (0, common_1.Module)({
-        imports: [auth_module_1.AuthModule, url_module_1.UrlModule],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
     })
