@@ -20,13 +20,16 @@ let Url = class Url extends sequelize_typescript_1.Model {
 exports.Url = Url;
 __decorate([
     (0, sequelize_typescript_1.Column)({
-        allowNull: false,
+        type: sequelize_typescript_1.DataType.STRING(2048),
+        allowNull: false
     }),
     __metadata("design:type", String)
 ], Url.prototype, "originalUrl", void 0);
 __decorate([
+    sequelize_typescript_1.Index,
     (0, sequelize_typescript_1.Column)({
-        unique: true,
+        allowNull: false,
+        unique: true
     }),
     __metadata("design:type", String)
 ], Url.prototype, "shortCode", void 0);
@@ -45,6 +48,7 @@ __decorate([
 exports.Url = Url = __decorate([
     (0, sequelize_typescript_1.Table)({
         tableName: 'urls',
+        timestamps: true
     })
 ], Url);
 //# sourceMappingURL=url.model.js.map

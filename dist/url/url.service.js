@@ -8,40 +8,78 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UrlService = void 0;
 const common_1 = require("@nestjs/common");
-const sequelize_1 = require("@nestjs/sequelize");
-const url_model_1 = require("./url.model");
+const url_repository_1 = require("../repository/url.repository");
 let UrlService = class UrlService {
-    urlModel;
-    constructor(urlModel) {
-        this.urlModel = urlModel;
+    urlRepository;
+    constructor(urlRepository) {
+        this.urlRepository = urlRepository;
     }
-    async findAll() {
-        return this.urlModel.findAll();
+    generateShortCode() {
+        const timestamp = Date.now().toString(36).toUpperCase();
+        const random = Math.random().toString(36).substring(2, 6).toUpperCase();
+        return `${timestamp}-${random}`;
     }
-    findOne(id) {
-        return this.urlModel.findOne({
-            where: {
-                id,
-            },
-        });
+    async create(urlCreationDto) {
+        const { originalUrl, expiresAt, clickCount } = urlCreationDto;
+        const existingUrl = await this.urlRepository.fetchUrl({ originalUrl });
+        if (existingUrl) {
+            throw new common_1.ConflictException('URL already exists');
+        }
+        let shortCode = this.generateShortCode();
+        let shortCodeExists = await this.urlRepository.fetchUrl({ shortCode });
+        while (shortCodeExists) {
+            shortCode = this.generateShortCode();
+            shortCodeExists = await this.urlRepository.fetchUrl({ shortCode });
+        }
+        const newUrl = await this.urlRepository.createUrl({ originalUrl, shortCode, expiresAt, clickCount });
+        return {
+            urlData: newUrl,
+            shortUrl: `http://localhost:3000/${newUrl.shortCode}`,
+        };
+    }
+    async findAll(filter) {
+        return this.urlRepository.fetchAllUrls(filter);
+    }
+    async findOne(shortCode) {
+        return this.urlRepository.fetchUrl({ shortCode });
+    }
+    async findByShortCode(shortCode) {
+        return this.urlRepository.fetchUrl({ shortCode });
+    }
+    async update(id, urlCreationDto) {
+        const url = await this.findOne(id);
+        if (!url) {
+            return null;
+        }
+        const { originalUrl, expiresAt, clickCount } = urlCreationDto;
+        url.originalUrl = originalUrl;
+        url.expiresAt = expiresAt;
+        url.clickCount = clickCount;
+        await this.urlRepository.save(url);
+        return url;
+    }
+    async incrementClickCount(id) {
+        const url = await this.findOne(id);
+        if (!url) {
+            return null;
+        }
+        url.clickCount += 1;
+        await this.urlRepository.save(url);
+        return url;
     }
     async remove(id) {
         const url = await this.findOne(id);
         if (url) {
-            await url.destroy();
+            await this.urlRepository.destroy({ where: { id } });
         }
     }
 };
 exports.UrlService = UrlService;
 exports.UrlService = UrlService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, sequelize_1.InjectModel)(url_model_1.Url)),
-    __metadata("design:paramtypes", [Object])
+    __metadata("design:paramtypes", [url_repository_1.UrlRepository])
 ], UrlService);
 //# sourceMappingURL=url.service.js.map

@@ -2,20 +2,26 @@ import {
   Table,
   Column,
   Model,
+  Index,
   DataType,
 } from 'sequelize-typescript';
 
 @Table({
   tableName: 'urls',
+  timestamps: true
 })
+
 export class Url extends Model<Url> {
   @Column({
-    allowNull: false,
+    type: DataType.STRING(2048),
+    allowNull: false
   })
   originalUrl: string;
 
+  @Index
   @Column({
-    unique: true,
+    allowNull: false,
+    unique: true
   })
   shortCode: string;
 

@@ -12,15 +12,16 @@ const url_service_1 = require("./url.service");
 const url_controller_1 = require("./url.controller");
 const url_model_1 = require("./url.model");
 const sequelize_1 = require("@nestjs/sequelize");
+const url_repository_1 = require("../repository/url.repository");
 let UrlModule = class UrlModule {
 };
 exports.UrlModule = UrlModule;
 exports.UrlModule = UrlModule = __decorate([
     (0, common_1.Module)({
         imports: [sequelize_1.SequelizeModule.forFeature([url_model_1.Url])],
-        exports: [sequelize_1.SequelizeModule],
-        providers: [url_service_1.UrlService],
-        controllers: [url_controller_1.UrlController]
+        providers: [url_service_1.UrlService, url_repository_1.UrlRepository],
+        controllers: [url_controller_1.UrlController],
+        exports: [sequelize_1.SequelizeModule, url_repository_1.UrlRepository],
     })
 ], UrlModule);
 //# sourceMappingURL=url.module.js.map
