@@ -34,17 +34,24 @@ let UrlService = class UrlService {
             shortCode = this.generateShortCode();
             shortCodeExists = await this.urlRepository.fetchUrl({ shortCode });
         }
-        const newUrl = await this.urlRepository.createUrl({ originalUrl, shortCode, expiresAt, clickCount });
-        return {
-            urlData: newUrl,
-            shortUrl: `http://localhost:3000/${newUrl.shortCode}`,
-        };
+        return this.urlRepository.createUrl({
+            originalUrl,
+            shortCode,
+            expiresAt,
+            clickCount
+        });
     }
     async findAll(filter) {
         return this.urlRepository.fetchAllUrls(filter);
     }
     async findOne(shortCode) {
-        return this.urlRepository.fetchUrl({ shortCode });
+        const url = await this.urlRepository.fetchUrl({ shortCode });
+        if (!url) {
+            throw new common_1.NotFoundException('URL not found');
+        }
+        const clickCount = url.clickCount + 1;
+        await this.urlRepository.updateUrl(url.id, { clickCount });
+        return url;
     }
     async findByShortCode(shortCode) {
         return this.urlRepository.fetchUrl({ shortCode });

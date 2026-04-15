@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, Post, Query, ValidationPipe } from '@nestjs/common';
-import { UrlCreationAttributes, UrlService } from './url.service';
+import { UrlService } from './url.service';
 import { Validate } from 'sequelize-typescript';
 import { Url } from './url.model';
 import { UrlCreationDto } from './dto/create-url.dto';
@@ -9,7 +9,7 @@ export class UrlController {
     constructor(private readonly urlService: UrlService) {}
 
     @Post()
-    create(@Body(ValidationPipe) urlCreationDto: UrlCreationDto): Promise<UrlCreationAttributes> {
+    create(@Body(ValidationPipe) urlCreationDto: UrlCreationDto): Promise<Url> {
         return this.urlService.create(urlCreationDto);
     }
 
