@@ -19,3 +19,18 @@ export class UrlCreationDto {
     @IsNumber()
     clickCount: number;
 }
+
+export class UrlUpdateDto {
+    @IsString()
+    @IsOptional()
+    originalUrl: string;
+
+    @IsOptional()
+    @Type(() => Date)
+    @IsDate()
+    expiresAt: Date;
+
+    @IsOptional()
+    @IsNumber()
+    clickCount: number;
+}

@@ -4,8 +4,9 @@ import {
   NotFoundException
 } from '@nestjs/common';
 import { Url } from './url.model';
-import { UrlCreationDto } from './dto/create-url.dto';
+import { UrlCreationDto, UrlUpdateDto } from './dto/url.dto';
 import { UrlRepository } from '../repository/url.repository';
+import { log } from 'node:console';
 
 @Injectable()
 export class UrlService {
@@ -61,17 +62,17 @@ export class UrlService {
 
   async update(
     id: string,
-    urlCreationDto: UrlCreationDto
+    urlUpdate: UrlUpdateDto
   ): Promise<Url | null> {
     const url = await this.findOne(id);
     if (!url) {
       return null;
     }
 
-    const { originalUrl, expiresAt, clickCount } = urlCreationDto;
-    url.originalUrl = originalUrl;
-    url.expiresAt = expiresAt;
-    url.clickCount = clickCount;
+    const { originalUrl, expiresAt, clickCount } = urlUpdate;
+    url.dataValues.originalUrl = originalUrl;
+    url.dataValues.expiresAt = expiresAt;
+    url.dataValues.clickCount = clickCount;
 
     await this.urlRepository.save(url);
     return url;

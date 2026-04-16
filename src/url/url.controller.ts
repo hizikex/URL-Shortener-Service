@@ -1,8 +1,7 @@
-import { Body, Controller, Get, Param, Post, Query, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Query, ValidationPipe } from '@nestjs/common';
 import { UrlService } from './url.service';
-import { Validate } from 'sequelize-typescript';
 import { Url } from './url.model';
-import { UrlCreationDto } from './dto/create-url.dto';
+import { UrlCreationDto, UrlUpdateDto } from './dto/url.dto';
 
 @Controller('urls')
 export class UrlController {
@@ -23,5 +22,8 @@ export class UrlController {
         return this.urlService.findByShortCode(shortCode);
     }
 
-
+    @Patch(':code')
+    update(@Param('code') shortCode: string, @Body(ValidationPipe) urlUpdateDto: UrlUpdateDto): Promise<Url | null> {
+        return this.urlService.update(shortCode, urlUpdateDto);
+    }
 }
