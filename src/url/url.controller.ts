@@ -20,7 +20,7 @@ export class UrlController {
 
     @Get(':code')
     findOne(@Param('code') shortCode: string): Promise<Url | null> {
-        return this.urlService.findOne(shortCode);
+        return this.urlService.findByShortCode(shortCode);
     }
 
 
