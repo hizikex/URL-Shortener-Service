@@ -74,18 +74,9 @@ export class UrlService {
     url.dataValues.expiresAt = expiresAt;
     url.dataValues.clickCount = clickCount;
 
-    await this.urlRepository.save(url);
-    return url;
-  }
-
-  async incrementClickCount(id: string): Promise<Url | null> {
-    const url = await this.findOne(id);
-    if (!url) {
-      return null;
-    }
-
-    url.clickCount += 1;
-    await this.urlRepository.save(url);
+    const a = await this.urlRepository.save(url);
+    console.log(a);
+    
     return url;
   }
 

@@ -6,9 +6,13 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { Url } from './url/url.model';
 import { UrlModule } from './url/url.module';
+import { LoggerModule } from './logger/logger.module';
+import { LoggingInterceptor } from './interceptors/logging.interceptor';
+import { GlobalExceptionFilter } from './filters/global-exception.filter';
 
 @Module({
   imports: [
+    LoggerModule,
     SequelizeModule.forRoot({
       dialect: 'mysql',
       host: '127.0.0.1',
@@ -24,6 +28,10 @@ import { UrlModule } from './url/url.module';
     UrlModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    LoggingInterceptor,
+    GlobalExceptionFilter,
+  ],
 })
 export class AppModule {}
